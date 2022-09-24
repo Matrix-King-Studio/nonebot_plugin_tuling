@@ -10,6 +10,7 @@
 # >>> Blog      : https://alex007.blog.csdn.net/
 # ☆ ☆ ☆ ☆ ☆ ☆ ☆
 import json
+import os
 import random
 from pathlib import Path
 from typing import Any, Dict, Union, List, Optional
@@ -35,31 +36,35 @@ def save_json(_file: Path, _data: Any) -> None:
 class ChatManager:
 	def __init__(self):
 		self._chat: Dict[str, Union[List[str], Dict[str, bool]]] = {}
-		self._chat_json: Path = plugin_config.config_path / "config.json"
-		self.apikey: List[str] = plugin_config.apikey
+		self._chat_json = plugin_config.config_path / "config.json"
+		if not os.path.exists(self._chat_json):
+			save_json(self._chat_json, {"groups_id": {}})
+		self.apikey: List[str] = plugin_config.tu_ling_apikey
 
 	def update_groups_on(self, gid: str, new_state: bool) -> None:
 		"""
 			Turn on/off chat in group
 		"""
+		logger.info(f"群 {gid} 设置状态为：{new_state}")
 		self._chat = load_json(self._chat_json)
-
 		if new_state:
 			if gid not in self._chat["groups_id"]:
 				self._chat["groups_id"].update({gid: True})
 		else:
 			if gid in self._chat["groups_id"]:
 				self._chat["groups_id"].update({gid: False})
-
 		save_json(self._chat_json, self._chat)
 
 	async def do_chat(self, gid, user_msg) -> None:
 		bot = get_bot()
 		self._chat = load_json(self._chat_json)
-		msg = self._get_chat_msg(user_msg)
 
-		if isinstance(msg, MessageSegment) and bool(self._chat["groups_id"]) > 0:
-			if self._chat["groups_id"].get(gid, False):
+		if self._chat["groups_id"].get(gid, False):
+			if "下次再聊" in user_msg or "再见" in user_msg or "拜拜" in user_msg:
+				self.update_groups_on(gid, False)
+
+			msg = self._get_chat_msg(user_msg)
+			if isinstance(msg, MessageSegment) and bool(self._chat["groups_id"]) > 0:
 				try:
 					await bot.call_api("send_group_msg", group_id=int(gid), message=msg)
 				except ActionFailed as e:
@@ -95,13 +100,12 @@ class ChatManager:
 				headers={"Content-Type": "application/json;charset=UTF-8"}
 			)
 			response_dict = json.loads(response.text)
-
+			logger.info("response_dict: " + response_dict)
 			res = response_dict["results"][0]["values"]["text"]
 			logger.info("Tu Ling Robot said: " + res)
 			return MessageSegment.text(res)
 		except Exception as e:
 			logger.warning(f"请求图灵机器人失败：{e}")
-			return None
 
 
 chat_manager = ChatManager()

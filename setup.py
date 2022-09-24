@@ -16,7 +16,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="nonebot_plugin_tuling",
-    version="0.0.2",
+    version="0.0.8",
     author="alex",
     author_email="liu_zhao_feng_alex@163.com",
     description="nonebot_plugin_tuling",
@@ -26,12 +26,14 @@ setuptools.setup(
     project_urls={
         "Bug Tracker": "https://github.com/Matrix-King-Studio/nonebot_plugin_tuling/issues",
     },
+    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "nonebot_plugin_tuling"},
-    packages=setuptools.find_packages(where="nonebot_plugin_tuling"),
+    include_package_data=True,
     python_requires=">=3.9",
+    platforms="any",
+    install_requires=["requests>=2.28.1"]
 )

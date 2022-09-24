@@ -16,12 +16,9 @@ from nonebot import get_driver
 from pydantic import BaseModel, Extra
 
 
-# apikey = ["fad1ed7e71b14a0a947ce41b14206fd0"]
-
-
 class Config(BaseModel, extra=Extra.ignore):
-	config_path: Path = Path(__file__).parent / "resource"
-	apikey: List[str] = list()
+	config_path: Path = Path(__file__).parent
+	tu_ling_apikey: List[str] = list()
 
 
 plugin_config = Config.parse_obj(get_driver().config)
