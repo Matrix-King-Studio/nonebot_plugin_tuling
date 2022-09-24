@@ -43,9 +43,6 @@ class ChatManager:
 		self.apikey: List[str] = plugin_config.tu_ling_apikey
 
 	def update_groups_on(self, gid: str, new_state: bool) -> None:
-		"""
-			Turn on/off chat in group
-		"""
 		logger.info(f"群 {gid} 设置状态为：{new_state}")
 		self._chat = load_json(self._chat_json)
 		self._chat["groups_id"][gid] = new_state
@@ -67,7 +64,6 @@ class ChatManager:
 					logger.warning(f"发送群 {gid} 失败：{e}")
 
 	def _get_chat_msg(self, user_msg) -> Optional[MessageSegment]:
-		""" Get a reply, return None if empty """
 		try:
 			api_url = "http://openapi.tuling123.com/openapi/api/v2"
 			req = {
@@ -89,12 +85,8 @@ class ChatManager:
 					"userId": "Alex"
 				}
 			}
-			response = requests.request(
-				"post",
-				api_url,
-				json=req,
-				headers={"Content-Type": "application/json;charset=UTF-8"}
-			)
+			headers = {"Content-Type": "application/json;charset=UTF-8"}
+			response = requests.request("post", api_url, json=req, headers=headers)
 			response_dict = json.loads(response.text)
 			res = response_dict["results"][0]["values"]["text"]
 			logger.info("Tu Ling Robot said: " + res)

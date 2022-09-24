@@ -22,20 +22,17 @@ reply = on_message(priority=100)
 
 @chat_on.handle()
 async def _(event: GroupMessageEvent):
-	gid = str(event.group_id)
-	chat_manager.update_groups_on(gid, True)
+	chat_manager.update_groups_on(str(event.group_id), True)
 	await chat_on.finish("已开启闲聊~")
 
 
 @chat_off.handle()
 async def _(event: GroupMessageEvent):
-	gid = str(event.group_id)
-	chat_manager.update_groups_on(gid, False)
+	chat_manager.update_groups_on(str(event.group_id), False)
 	await chat_off.finish("已关闭闲聊~")
 
 
 @reply.handle()
 async def chat(event: GroupMessageEvent):
-	gid = str(event.group_id)
 	user_msg = str(event.get_message()).strip()
-	await chat_manager.do_chat(gid, user_msg)
+	await chat_manager.do_chat(str(event.group_id), user_msg)
