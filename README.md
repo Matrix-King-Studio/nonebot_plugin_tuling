@@ -12,7 +12,7 @@
 
 ## 📖 介绍
 
-这里是插件的详细介绍部分
+接入图灵机器人做群自动聊天。
 
 ## 💿 安装
 
@@ -34,16 +34,6 @@
     pip install nonebot_plugin_tuling
 </details>
 <details>
-<summary>pdm</summary>
-
-    pdm add nonebot_plugin_tuling
-</details>
-<details>
-<summary>poetry</summary>
-
-    poetry add nonebot_plugin_tuling
-</details>
-<details>
 <summary>conda</summary>
 
     conda install nonebot_plugin_tuling
@@ -51,7 +41,7 @@
 
 打开 nonebot2 项目的 `bot.py` 文件, 在其中写入
 
-    nonebot.load_plugin('nonebot_plugin_tuling')
+    nonebot.load_plugin("nonebot_plugin_tuling")
 
 </details>
 
@@ -63,7 +53,7 @@
 
 打开 nonebot2 项目的 `bot.py` 文件, 在其中写入
 
-    nonebot.load_plugin('src.plugins.nonebot_plugin_tuling')
+    nonebot.load_plugin("src.plugins.nonebot_plugin_tuling")
 
 </details>
 
@@ -71,23 +61,25 @@
 
 在 nonebot2 项目的`.env`文件中添加下表中的必填配置
 
-| 配置项 | 必填 | 默认值 | 说明 |
-|:-----:|:----:|:----:|:----:|
-| 配置项1 | 是 | 无 | 配置说明 |
-| 配置项2 | 否 | 无 | 配置说明 |
+| 配置项 | 必填 |  默认值   |                            说明                            |
+|:-----:|:----:|:------:|:--------------------------------------------------------:|
+| config_path | 否 | 插件安装目录 |                           分群配置                           |
+| tu_ling_apikey | 否 |   无    | 在[图灵机器人](http://www.turingapi.com/)创建一个机器人，获取apikey，支持列表 |
+
+```shell
+# 图灵机器人
+tu_ling_apikey=["*******", "*******", "*******"]
+```
 
 ## 🎉 使用
+
 ### 指令表
-| 指令 | 权限 | 需要@ | 范围 | 说明 |
-|:-----:|:----:|:----:|:----:|:----:|
-| 指令1 | 主人 | 否 | 私聊 |配置说明 |
-| 指令2 | 群员 | 是 | 群聊 |配置说明 |
+
+|    指令    | 权限 | 需要@ | 范围 |
+|:--------:|:----:|:----:|:----:|
+|  /开启闲聊   | 群员 | 否 | 群聊 |
+|  /关闭闲聊   | 群员 | 否 | 群聊 |
 
 ### 效果图
-如果有效果图的话
 
----
-```shell
-python setup.py sdist
-twine upload dist/*
-```
+![](./docs/images/效果图.png)
