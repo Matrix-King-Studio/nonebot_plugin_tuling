@@ -9,6 +9,7 @@
 # >>> Github    : https://github.com/koking0
 # >>> Blog      : https://alex007.blog.csdn.net/
 # ☆ ☆ ☆ ☆ ☆ ☆ ☆
+import asyncio
 import json
 import os
 import random
@@ -47,12 +48,7 @@ class ChatManager:
 		"""
 		logger.info(f"群 {gid} 设置状态为：{new_state}")
 		self._chat = load_json(self._chat_json)
-		if new_state:
-			if gid not in self._chat["groups_id"]:
-				self._chat["groups_id"].update({gid: True})
-		else:
-			if gid in self._chat["groups_id"]:
-				self._chat["groups_id"].update({gid: False})
+		self._chat["groups_id"][gid] = new_state
 		save_json(self._chat_json, self._chat)
 
 	async def do_chat(self, gid, user_msg) -> None:
@@ -100,9 +96,9 @@ class ChatManager:
 				headers={"Content-Type": "application/json;charset=UTF-8"}
 			)
 			response_dict = json.loads(response.text)
-			logger.info("response_dict: " + response_dict)
 			res = response_dict["results"][0]["values"]["text"]
 			logger.info("Tu Ling Robot said: " + res)
+			await asyncio.sleep(len(res) / len(user_msg + res))
 			return MessageSegment.text(res)
 		except Exception as e:
 			logger.warning(f"请求图灵机器人失败：{e}")
