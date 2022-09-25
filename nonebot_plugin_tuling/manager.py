@@ -57,6 +57,7 @@ class ChatManager:
 				self.update_groups_on(gid, False)
 
 			msg = await self._get_chat_msg(user_msg)
+			logger.info("msg: " + msg)
 			if isinstance(msg, MessageSegment) and bool(self._chat["groups_id"]) > 0:
 				try:
 					await bot.call_api("send_group_msg", group_id=int(gid), message=msg)
