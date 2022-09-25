@@ -56,7 +56,7 @@ class ChatManager:
 			if "下次再聊" in user_msg or "再见" in user_msg or "拜拜" in user_msg:
 				self.update_groups_on(gid, False)
 
-			msg = asyncio.run(self._get_chat_msg(user_msg))
+			msg = await self._get_chat_msg(user_msg)
 			if isinstance(msg, MessageSegment) and bool(self._chat["groups_id"]) > 0:
 				try:
 					await bot.call_api("send_group_msg", group_id=int(gid), message=msg)

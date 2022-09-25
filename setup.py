@@ -16,7 +16,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="nonebot_plugin_tuling",
-    version="0.0.15",
+    version="0.0.16",
     author="alex",
     author_email="liu_zhao_feng_alex@163.com",
     description="nonebot_plugin_tuling",
