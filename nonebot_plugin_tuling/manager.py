@@ -16,7 +16,7 @@ import random
 from pathlib import Path
 from typing import Any, Dict, Union, List, Optional
 
-import requests
+import httpx
 from nonebot import get_bot, logger
 from nonebot.adapters.onebot.v11 import ActionFailed
 from nonebot.adapters.onebot.v11 import MessageSegment
@@ -43,7 +43,7 @@ class ChatManager:
 		self.apikey: List[str] = plugin_config.tu_ling_apikey
 
 	def update_groups_on(self, gid: str, new_state: bool) -> None:
-		logger.info(f"群 {gid} 设置状态为：{new_state}")
+		logger.info(f"群 {gid} 闲聊设置状态为：{new_state}")
 		self._chat = load_json(self._chat_json)
 		self._chat["groups_id"][gid] = new_state
 		save_json(self._chat_json, self._chat)
@@ -86,12 +86,13 @@ class ChatManager:
 				}
 			}
 			headers = {"Content-Type": "application/json;charset=UTF-8"}
-			response = requests.request("post", api_url, json=req, headers=headers)
-			response_dict = json.loads(response.text)
-			res = response_dict["results"][0]["values"]["text"]
-			logger.info("Tu Ling Robot said: " + res)
-			await asyncio.sleep(len(res) / len(user_msg + res))
-			return MessageSegment.text(res)
+			async with httpx.AsyncClient(verify=False, timeout=None) as client:
+				response = await client.post(api_url, json=req, headers=headers)
+				response_dict = json.loads(response.text)
+				res = response_dict["results"][0]["values"]["text"]
+				logger.info("Tu Ling Robot said: " + res)
+				await asyncio.sleep(len(res) / len(user_msg + res))
+				return MessageSegment.text(res)
 		except Exception as e:
 			logger.warning(f"请求图灵机器人失败：{e}")
 

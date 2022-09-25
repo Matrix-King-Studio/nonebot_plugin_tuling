@@ -35,5 +35,8 @@ setuptools.setup(
     include_package_data=True,
     python_requires=">=3.9",
     platforms="any",
-    install_requires=["requests>=2.28.1"]
+    install_requires=[
+        "nonebot2>=2.0.0-beta.2",
+        "nonebot-adapter-onebot",
+        "httpx>=0.23.0"]
 )
