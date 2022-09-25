@@ -63,7 +63,7 @@ class ChatManager:
 				except ActionFailed as e:
 					logger.warning(f"发送群 {gid} 失败：{e}")
 
-	def _get_chat_msg(self, user_msg) -> Optional[MessageSegment]:
+	async def _get_chat_msg(self, user_msg) -> Optional[MessageSegment]:
 		try:
 			api_url = "http://openapi.tuling123.com/openapi/api/v2"
 			req = {
